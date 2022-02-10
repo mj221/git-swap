@@ -80,6 +80,48 @@ class App extends Component {
     // }
   }
 
+  buyTokens = (ethAmount) => {
+    this.setState({loading: true})
+    this.state.gitSwap.methods.buyTokens()
+                              .send({from: this.state.account, value: ethAmount})
+                              .on('transactionHash', (hash) => {
+                                // for debug
+                                this.setState({loading: true})
+                                
+                              })
+                              .on('confirmation', async (receipt) => {
+                                // window.location.reload()
+                                
+                                let bal = await window.web3.eth.getBalance(this.state.account)
+                                let tbal = await this.state.poiToken.methods.balanceOf(this.state.account).call()
+                                this.setState({ ethBalance: bal })
+                                this.setState({tokenBalance: tbal.toString()})
+                                // console.log("CHECKPOINT_BUY:", bal)
+                                // console.log("CHECKPOINT_BUY2:", tbal.toString())
+                                this.setState({loading: false})
+                              })
+  }
+
+  sellTokens = async(tokenAmount) =>{
+    this.setState({loading: true})
+    this.state.poiToken.methods.approve(this.state.gitSwap.address, tokenAmount)
+                                .send({from: this.state.account})
+                                .on('transactionHash', (hash) => {
+                                  this.state.gitSwap.methods.sellTokens(tokenAmount)
+                                                            .send({from: this.state.account})
+                                                            .on('confirmation', async (receipt) => {
+                                                              let bal = await window.web3.eth.getBalance(this.state.account)
+                                                              let tbal = await this.state.poiToken.methods.balanceOf(this.state.account).call()
+                                                              this.setState({ ethBalance: bal })
+                                                              this.setState({tokenBalance: tbal.toString()})
+                                                              
+                                                              this.setState({loading: false})
+                                                            })
+                                }).on('confirmation', () => {
+                                  this.setState({loading: true})
+                                })
+  }
+
   constructor(props) {
     super(props)
     this.state = {
@@ -95,9 +137,16 @@ class App extends Component {
   render() {
     let content
     if (this.state.loading) {
-      content = <p id="loader" className="text-center">Connect MetaMask...</p>
+      content = <p id="loader" className="text-center">Loading...</p>
+      
     } else {
-      content = <Main />
+      
+      content = <Main 
+        ethBalance={this.state.ethBalance} 
+        tokenBalance={this.state.tokenBalance}
+        buyTokens={this.buyTokens}
+        sellTokens= {this.sellTokens}
+        />
     }
     return (
       <div>
@@ -106,15 +155,11 @@ class App extends Component {
 
         <div className="container-fluid mt-5">
           <div className="row">
-            <main role="main" className="col-lg-12 d-flex text-center">
+            <main role="main" className="col-lg-12 ml-auto mr-auto text-center" style={{maxWidth: '600px'}}>
               <div className="content mr-auto ml-auto">
-                <a
-                  href=""
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                </a>
+                
                 {content}
+
               </div>
             </main>
           </div>
