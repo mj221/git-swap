@@ -3,7 +3,7 @@ import BuyForm from './BuyForm'
 import SellForm from './SellForm'
 
 import { IoSwapVerticalSharp } from 'react-icons/io5';
-
+import './App.css'
 
 class Main extends Component {
     constructor(props){
@@ -28,9 +28,7 @@ class Main extends Component {
                 sellTokens={this.props.sellTokens}
             />
         }
-        const buttonStyle = {
-            margin: '10px 10px 10px 0'
-        }
+        
         return (
             <div id="content" className= "mt-3">
                 {/* <div className="d-flex justify-content-between mb-3">
@@ -51,15 +49,22 @@ class Main extends Component {
                     </button>
                 </div> */}
                 <div className = "cardgroup">
-                    <div className="card mb-4 d-flex flex-row">
+                    <div className="card mb-4 d-flex flex-row align-items-center">
                         <div className="card-body">
                             {content}
                         </div>
-                        <div className="card-body mt-10">
-                            <button
-                                className="btn btn-light"
-                                style={buttonStyle}> 
-                                    <IoSwapVerticalSharp size={30}/>
+                        <div className="card-body">
+                            <button 
+                                className="btn btn-light mb-8"
+                                onClick={() => {
+                                    if (this.state.currentForm == "buy"){
+                                        this.setState({currentForm: "sell"})
+                                    }else{
+                                        this.setState({currentForm: "buy"})
+                                    }
+                                }}
+                                > 
+                                    <IoSwapVerticalSharp size={25}/>
                             </button>
                         </div>
                     </div>

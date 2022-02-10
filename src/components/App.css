@@ -1,1 +1,10 @@
 /* Styles go here */
+.center {
+    display: flex;
+    justify-content: 'center';
+    align-items: 'center';
+}
+
+.mb-8 {
+    margin-bottom: 80px;
+}
