@@ -86,6 +86,7 @@ class App extends Component {
     this.state.gitSwap.methods.buyTokens()
                               .send({from: this.state.account, value: ethAmount})
                               .on('transactionHash', (hash) => {
+                                this.setState({currentForm: "buy"})
                                 // for debug
                                 this.setState({loading: true})
                                 
@@ -100,6 +101,8 @@ class App extends Component {
                                 // console.log("CHECKPOINT_BUY:", bal)
                                 // console.log("CHECKPOINT_BUY2:", tbal.toString())
                                 this.setState({loading: false})
+                              }).catch((error) => {
+                                this.setState({loading: false})
                               })
   }
 
@@ -108,6 +111,7 @@ class App extends Component {
     this.state.poiToken.methods.approve(this.state.gitSwap.address, tokenAmount)
                                 .send({from: this.state.account})
                                 .on('transactionHash', (hash) => {
+                                  this.setState({currentForm: "sell"})
                                   this.state.gitSwap.methods.sellTokens(tokenAmount)
                                                             .send({from: this.state.account})
                                                             .on('confirmation', async (receipt) => {
@@ -119,7 +123,10 @@ class App extends Component {
                                                               this.setState({loading: false})
                                                             })
                                 }).on('confirmation', () => {
+                                
                                   this.setState({loading: true})
+                                }).catch((err)=>{
+                                  this.setState({loading:false})
                                 })
   }
 
@@ -131,7 +138,8 @@ class App extends Component {
       poiToken: '',
       tokenBalance: '',
       gitSwap: '',
-      loading: true
+      loading: true,
+      currentForm: "buy"
     }
     // this.loadWeb3 = this.loadWeb3.bind(this);
     // this.loadBlockchainData = this.loadBlockchainData.bind(this);
@@ -149,6 +157,7 @@ class App extends Component {
         tokenBalance={this.state.tokenBalance}
         buyTokens={this.buyTokens}
         sellTokens= {this.sellTokens}
+        currentForm={this.state.currentForm}
         />
     }
     return (
