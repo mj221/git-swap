@@ -11,8 +11,8 @@ import './App.css'
 
 class App extends Component {
   async componentWillMount() {
-    await this.loadWeb3()
-    await this.loadBlockchainData()
+    // await this.loadWeb3()
+    // await this.loadBlockchainData()
   }
   async loadBlockchainData() {
     const web3 = window.web3
@@ -59,12 +59,13 @@ class App extends Component {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum)
       await window.ethereum.enable()
-
+      
     } else if (window.web3) {
       window.web3 = new Web3(window.web3.currentProvider)
     } else {
       window.alert("Non-Ethereum browser detected. Try using MetaMask.")
     }
+    
     // if (window.ethereum) {
     //   try {
     //     const accounts = await window.ethereum.request({ method: 'eth_requestAccounts' })
@@ -132,6 +133,8 @@ class App extends Component {
       gitSwap: '',
       loading: true
     }
+    // this.loadWeb3 = this.loadWeb3.bind(this);
+    // this.loadBlockchainData = this.loadBlockchainData.bind(this);
   }
 
   render() {
@@ -151,9 +154,9 @@ class App extends Component {
     return (
       <div>
 
-        <Navbar account={this.state.account} />
+        <Navbar account={this.state.account} loadWeb3= {this.loadWeb3} loadBlockchainData= {this.loadBlockchainData.bind(this)}/>
 
-        <div className="container-fluid mt-5">
+        <div className="container-fluid mt-7">
           <div className="row">
             <main role="main" className="col-lg-12 ml-auto mr-auto text-center" style={{maxWidth: '600px'}}>
               <div className="content mr-auto ml-auto">

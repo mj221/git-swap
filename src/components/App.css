@@ -8,3 +8,16 @@
 .mb-8 {
     margin-bottom: 80px;
 }
+
+.mt-7 {
+    margin-top: 70px;
+}
+
+.textshadow {
+    color: white;
+    text-shadow: 2px;
+    outline: blue;
+}
+.bg-git{
+    color: #0d1117;
+}

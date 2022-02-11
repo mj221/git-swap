@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import Identicon from 'identicon.js';
-
+import gitLogo from '../gitlogo.png'
 import './App.css'
 
 class Navbar extends Component {
@@ -12,25 +12,34 @@ class Navbar extends Component {
           <a
             className="navbar-brand col-sm-3 col-md-2 mr-0"
             href=""
-            target="_blank"
-            rel="noopener noreferrer"
+            // rel="noopener noreferrer"
           >
+            <img src={gitLogo} height='42' alt="" className="mb-1 mr-2"/>
             Git Swap
           </a>
           <ul className="navbar-nav px-3">
             <li className="navbar-item text-nowrap d-none d-sm-none d-sm-block">
                 {this.props.account 
-                    ? <img
-                    className="mr-2"
-                    width='30'
-                    height='30'
-                    src={`data:image/png;base64,${new Identicon(this.props.account, 30).toString()}`}
-                    alt=""
-                    />
-                    :<span>No account</span>
+                    ? <><img
+                  className="mr-2"
+                  width='30'
+                  height='30'
+                  src={`data:image/png;base64,${new Identicon(this.props.account, 30).toString()}`}
+                  alt="" /><span className="textshadow mr-1">/</span></>
+                    :<span><button 
+                              className="btn btn-light"
+                              onClick={()=>{
+                                this.props.loadWeb3().then(async () => await this.props.loadBlockchainData())
+                              }}
+                              >
+                                Connect Wallet
+                            </button>
+                    </span>
                 }
+                
                 <small className="text-secondary">
-                    <small id="account">{this.props.account}</small>
+                  
+                    <small id="account" style={{color: 'white'}}>{this.props.account}</small>
                 </small>
 
                 
